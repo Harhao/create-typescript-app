@@ -4,6 +4,12 @@ importers:
 
   .: {}
 
+  packages/create-typescript-app:
+    devDependencies:
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.1(@types/node@20.3.1)(typescript@5.1.3)
+
   packages/cta-template-typescript:
     dependencies:
       animate.css:
