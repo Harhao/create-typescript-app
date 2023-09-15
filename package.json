@@ -1,0 +1,14 @@
+{
+  "name": "create-typescript-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsx:build": "pnpm --filter tsx-scripts build",
+    "tsx:start": "pnpm --filter tsx-scripts start",
+    "tsx:test": "pnpm --filter tsx-scripts test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
