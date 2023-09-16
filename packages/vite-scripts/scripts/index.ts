@@ -19,7 +19,7 @@ export const startDev = async (envData: Record<string, any>) => {
 
     const spinner = ora('✨ 构建产物中').start();
     try {
-        const config = getDevConfig();
+        const config = await getDevConfig(envData);
         const server = await createServer(config);
         await server.listen();
         server.printUrls();
@@ -34,7 +34,7 @@ export const startBuild = async (envData: Record<string, any>) => {
 
     const spinner = ora('✨ 构建产物中').start();
     try {
-        const config = getProdConfig();
+        const config = getProdConfig(envData);
         const buildRes = await build(config);
         spinner.succeed(chalk.green('🚀 服务构建成功'));
 
@@ -48,7 +48,7 @@ export const startPreview = async (envData: Record<string, any>) => {
 
     const spinner = ora('✨ 构建产物中').start();
     try {
-        const config = getProdConfig();
+        const config = getProdConfig(envData);
         const previewRes = await preview(config);
         spinner.succeed(chalk.green('🚀 服务构建成功'));
 

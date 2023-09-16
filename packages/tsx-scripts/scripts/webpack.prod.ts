@@ -8,9 +8,9 @@ import { resolve } from 'path';
 import { merge } from 'webpack-merge';
 import { Eenvironment } from './enum';
 import { cacheGroups } from '../config';
-import { execDirectoryPath, getOverrideConfig } from '../utils';
-import { PurgeCSSPlugin } from 'purgecss-webpack-plugin';
 import { Configuration } from 'webpack';
+import { PurgeCSSPlugin } from 'purgecss-webpack-plugin';
+import { execDirectoryPath, getOverrideConfig } from '../utils';
 
 
 const getWebpackProdConfig = async (envData: Record<string, any>) => {

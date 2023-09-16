@@ -1,20 +1,32 @@
 import { resolve } from 'path';
-import { mergeConfig } from 'vite';
+import { mergeConfig, splitVendorChunkPlugin } from 'vite';
+import { devServerConfig, getEntrys } from '../config';
 import { execDirectoryPath, getOverrideConfig } from '../utils';
 
 import react from '@vitejs/plugin-react';
 import autoprefixer from 'autoprefixer';
 
-const getCommonConfig = () => {
+// 获取公共配置
+const getCommonConfig = (envData: Record<string, any>) => {
 
     return {
-        base: process.env.PUBLIC_PATH,
-        mode: process.env.NODE_ENV,
+        base: envData.PUBLIC_PATH,
+        mode: envData.NODE_ENV,
         resolve: {
             alias: {
                 '@': resolve(execDirectoryPath(), '../src'),
             },
-            extensions: ['.tsx', '.ts', '.js', '.mjs', '.mts', '.jsx', '.json', '.less', '.css']
+            extensions: [
+                '.tsx', 
+                '.ts', 
+                '.js', 
+                '.mjs', 
+                '.mts', 
+                '.jsx', 
+                '.json', 
+                '.less', 
+                '.css',
+            ]
         },
         css: {
             postcss: {
@@ -28,43 +40,49 @@ const getCommonConfig = () => {
             react({
                 include: /\.(tsx|ts|mdx|js|jsx)$/
             }),
+            splitVendorChunkPlugin(),
         ],
         define: {
-            'process.env': process.env,
+            'process.env': envData,
         },
     }
 };
 
-export const getDevConfig = async () => {
+// 获取开发环境配置
+export const getDevConfig = async (envData: Record<string, any>) => {
 
-    const commonConfig = getCommonConfig();
-    
+    const commonConfig = getCommonConfig(envData);
+
+    const { server, ...restConfig } = devServerConfig;
+    const { proxy, ...otherConfig } = server;
+
     const proxyConfig = await getOverrideConfig('proxy.ts') || {};
-    
+
     return mergeConfig({
-        configFile: false,
-        clearScreen: true,
+        ...restConfig,
         server: {
-            open: true,
-            port: 6254,
-            host: '0.0.0.0',
+            ...otherConfig,
             proxy: {
-                '/api': {
-                    target: 'http://localhost:4000',
-                    changeOrigin: true,
-                    rewrite: (pathname: string) => {
-                        return pathname.replace(/\/api/, '');
-                    },
-                    secure: false,
-                },
+                ...proxy,
+                ...proxyConfig,
             }
-        },
+        }
     }, commonConfig);
 };
 
-export const getProdConfig = () => {
-    const commonConfig = getCommonConfig();
+// 获取生产环境配置
+export const getProdConfig = (envData: Record<string, any>) => {
+
+    const commonConfig = getCommonConfig(envData);
+    const entrys = getEntrys();
+
     return mergeConfig({
-        
+        build: {
+            rollupOptions: {
+                input: {
+                    ...entrys,
+                }
+            }
+        }
     }, commonConfig);
 };

@@ -1,6 +1,8 @@
 import fs from 'fs';
 import semver from 'semver';
-import pkg from '../package.json' assert { type: 'json'};
+
+//@ts-ignore
+import pkg from '../package.json';
 
 import { resolve } from 'path';
 import { execSync } from 'child_process';
@@ -21,6 +23,7 @@ export const execDirectoryPath = () => {
 }
 
 export const getOverrideConfig = (fileName: string): Promise<Record<string, any>> => {
+
     const overridePath = resolve(execDirectoryPath(), fileName);
 
     return new Promise((resolve, reject) => {
@@ -33,6 +36,7 @@ export const getOverrideConfig = (fileName: string): Promise<Record<string, any>
             });
             return;
         }
-        reject(new Error(`${fileName} not found`));
+        // reject(new Error(`${fileName} not found`));
+        resolve({});
     });
 }

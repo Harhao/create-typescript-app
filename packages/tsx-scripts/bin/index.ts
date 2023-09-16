@@ -1,9 +1,10 @@
 import { cli } from 'cleye';
 import { Eenvironment } from '../scripts/enum';
 import { build, dev, mock, test } from '../commands';
-import { loadEnvFile, startBuild, startDev } from '../scripts';
+import { loadEnvFile, startBuild, startDev  } from '../scripts';
 
-import pkg from '../package.json' assert { type: 'json'};
+//@ts-ignore
+import pkg from '../package.json';
 
 export enum ECommandMap {
     BUILD = 'build',
@@ -12,9 +13,13 @@ export enum ECommandMap {
     MOCK = 'mock',
 }
 
-const getEnvData = (runCommand: ECommandMap): Record<string, any> => {
 
-    let envConfig: { NODE_ENV: Eenvironment; CUSTOM_ENV: Eenvironment } | null = null;
+const getEnvData = async (runCommand: ECommandMap): Promise<Record<string, any>> => {
+
+    let envConfig: { NODE_ENV: Eenvironment; CUSTOM_ENV: Eenvironment } | null = {
+        NODE_ENV: Eenvironment.production,
+        CUSTOM_ENV: Eenvironment.production,
+    };
 
     switch (runCommand) {
         case ECommandMap.BUILD: envConfig = {
@@ -33,18 +38,14 @@ const getEnvData = (runCommand: ECommandMap): Record<string, any> => {
             NODE_ENV: Eenvironment.development,
             CUSTOM_ENV: Eenvironment.mock,
         }; break;
-        default: envConfig = {
-            NODE_ENV: Eenvironment.production,
-            CUSTOM_ENV: Eenvironment.production,
-        };
     }
 
-    return loadEnvFile(envConfig);
+    return await loadEnvFile(envConfig);
 }
 
 const start = async (runCommand: ECommandMap) => {
 
-    const envData = getEnvData(runCommand);
+    const envData = await getEnvData(runCommand);
 
     switch (runCommand) {
         case ECommandMap.BUILD: startBuild(envData); break;
@@ -76,9 +77,9 @@ try {
     const command = argv.command as ECommandMap;
     if (
         [
-            ECommandMap.BUILD, 
-            ECommandMap.DEV, 
-            ECommandMap.MOCK, 
+            ECommandMap.BUILD,
+            ECommandMap.DEV,
+            ECommandMap.MOCK,
             ECommandMap.TEST,
         ].includes(command)
     ) {

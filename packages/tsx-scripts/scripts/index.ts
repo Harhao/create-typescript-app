@@ -8,10 +8,8 @@ import WebpackDevServer from 'webpack-dev-server';
 import getWebpackDevConfig from './webpack.dev';
 import getWebpackProdConfig from './webpack.prod';
 
-// import { uploadSourceMap } from './upload';
 import { execDirectoryPath, getOverrideConfig } from '../utils';
 import { devServerConfig, printUrl } from '../config';
-import { Eenvironment } from './enum';
 
 export interface IEnvConfig {
     NODE_ENV: string | undefined;
@@ -27,6 +25,7 @@ export const startDev = async (envData: Record<string, any>) => {
         const config = getWebpackDevConfig(envData) as Configuration;
 
         const proxyConfig = await getOverrideConfig('proxy.ts') || {};
+
         const mergeConfig = {
             ...devServerConfig,
             proxy: {
@@ -43,6 +42,7 @@ export const startDev = async (envData: Record<string, any>) => {
             spinner.succeed(chalk.greenBright('✨ 构建成功啦～'));
             printUrl(server);
         });
+
     } catch (e) {
         spinner.fail('构建失败啦');
         console.error(e);
@@ -77,27 +77,29 @@ export const startBuild = async (envData: Record<string, any>) => {
     }
 }
 
-export const loadEnvFile = (envConfig): IEnvDataConfig => {
+export const loadEnvFile = (envConfig): Promise<IEnvDataConfig> => {
 
-    const { NODE_ENV, CUSTOM_ENV } = envConfig;
+    return new Promise(resolve => {
+        const { NODE_ENV, CUSTOM_ENV } = envConfig;
 
-    const spinner = ora('加载环境配置').start();
-
-    const defaultEnv = { parsed: {} };
-    const envFilePath = path.resolve(execDirectoryPath(), `./.env.${CUSTOM_ENV}`);
-
-    const config = fs.existsSync(envFilePath) ? dotenv.config({
-        path: envFilePath,
-        encoding: 'utf8',
-        override: true,
-    }) : defaultEnv;
+        const spinner = ora('加载环境配置').start();
     
-
-    spinner.succeed('加载配置成功～');
-
-    return {
-        NODE_ENV,
-        CUSTOM_ENV,
-        ...config.parsed,
-    };
+        const defaultEnv = { parsed: {} };
+        const envFilePath = path.resolve(execDirectoryPath(), `./.env.${CUSTOM_ENV}`);
+    
+        const config = fs.existsSync(envFilePath) ?  dotenv.config({
+            path: envFilePath,
+            encoding: 'utf8',
+            override: true,
+        }) : defaultEnv;
+        
+    
+        spinner.succeed('加载配置成功～');
+    
+        resolve({
+            NODE_ENV,
+            CUSTOM_ENV,
+            ...config.parsed,
+        });
+    });
 }
