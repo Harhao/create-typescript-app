@@ -1,11 +1,12 @@
-import path from "path";
 import os from "os";
 import webpack from "webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import pxToViewport from 'postcss-px-to-viewport';
 
-import { getEntrys, getHtmlPlugins } from "../config/common";
+import { resolve } from "path";
 import { execDirectoryPath } from "../utils";
+import { getEntrys, getHtmlPlugins } from "../config/common";
+
 
 const workerCount = os.cpus().length - 1;
 
@@ -20,13 +21,13 @@ const getWebpackBaseConfig = (envData: Record<string, any>) => ({
         globalObject: 'window',
         filename: 'static/js/[name]_[chunkhash:8].bundle.js',
         chunkFilename: 'static/js/[chunkhash:8].chunk.js',
-        path: path.resolve(workDirectory, "./dist"),
+        path: resolve(workDirectory, "./dist"),
         publicPath: envData.PUBLIC_PATH,
     },
     resolve: {
         alias: {
-            '@': path.resolve(workDirectory, './src'),
-            '@root': path.resolve(workDirectory, './'),
+            '@': resolve(workDirectory, './src'),
+            '@root': resolve(workDirectory, './'),
         },
         extensions: [".tsx", ".ts", ".js", ".jsx"],
     },
@@ -36,13 +37,13 @@ const getWebpackBaseConfig = (envData: Record<string, any>) => ({
                 test: /\.(tsx?|js)$/,
                 use: [
                     {
-                        loader: "thread-loader",
+                        loader: resolve(__dirname, "../node_modules", "thread-loader"),
                         options: {
                             workers: workerCount,
                         },
                     },
                     {
-                        loader: "ts-loader",
+                        loader:  resolve(__dirname, "../node_modules", "ts-loader"),
                         options: {
                             //开启多线程编译
                             happyPackMode: true,
@@ -58,10 +59,10 @@ const getWebpackBaseConfig = (envData: Record<string, any>) => ({
                 test: /\.(css|less)$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    "css-loader",
-                    "less-loader",
+                    resolve(__dirname, "../node_modules", "css-loader"),
+                    resolve(__dirname, "../node_modules", "less-loader"),
                     {
-                        loader: 'postcss-loader',
+                        loader:  resolve(__dirname, "../node_modules", 'postcss-loader'),
                         options: {
                             postcssOptions: {
                                 plugins: [
