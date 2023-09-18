@@ -24,7 +24,7 @@ export const startDev = async (envData: Record<string, any>) => {
     try {
         const config = await getWebpackDevConfig(envData) as Configuration;
 
-        const proxyConfig = await getOverrideConfig('proxy.ts');
+        const proxyConfig = await getOverrideConfig('proxy.ts') || {};
 
         const mergeConfig = {
             ...devServerConfig,

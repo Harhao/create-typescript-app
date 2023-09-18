@@ -20,7 +20,7 @@ export const execDirectoryPath = () => {
     return process.cwd();
 }
 
-export const getOverrideConfig = (fileName: string): Promise<Record<string, any>> => {
+export const getOverrideConfig = async (fileName: string): Promise<Record<string, any>> => {
 
     const overridePath = resolve(execDirectoryPath(), fileName);
 
@@ -34,7 +34,7 @@ export const getOverrideConfig = (fileName: string): Promise<Record<string, any>
             });
             return;
         }
-        console.warn(`${fileName} not found`);
+        console.warn(`\n${fileName} not found\n`);
         resolve({});
     });
 }
