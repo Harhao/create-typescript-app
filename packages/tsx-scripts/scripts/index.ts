@@ -22,7 +22,7 @@ export const startDev = async (envData: Record<string, any>) => {
 
     const spinner = ora('✨ 构建产物中').start();
     try {
-        const config = getWebpackDevConfig(envData) as Configuration;
+        const config = await getWebpackDevConfig(envData) as Configuration;
 
         const proxyConfig = await getOverrideConfig('proxy.ts');
 
