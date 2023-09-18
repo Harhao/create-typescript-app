@@ -1,6 +1,6 @@
 import chalk from "chalk";
+import ip from 'ip';
 import { resolve } from "path";
-import { internalIpV4Sync } from 'internal-ip';
 import { execDirectoryPath } from "../utils";
 
 const workDirectory = execDirectoryPath();
@@ -38,6 +38,6 @@ export const printUrl = (server) => {
 
     console.log(chalk.green(`\n项目运行在:`));
     console.log(chalk.green(`- ${protocol}://${hostname}:${devServerConfig.port}`));
-    console.log(chalk.green(`- ${protocol}://${internalIpV4Sync()}:${devServerConfig.port}`));
+    console.log(chalk.green(`- ${protocol}://${ip.address()}:${devServerConfig.port}`));
 }
 

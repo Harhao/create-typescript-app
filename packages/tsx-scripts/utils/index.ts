@@ -1,8 +1,7 @@
 import fs from 'fs';
 import semver from 'semver';
 
-//@ts-ignore
-import pkg from '../package.json';
+import pkg from '../package.json' assert { type: 'json' };
 
 import { resolve } from 'path';
 import { execSync } from 'child_process';
@@ -36,7 +35,7 @@ export const getOverrideConfig = (fileName: string): Promise<Record<string, any>
             });
             return;
         }
-        // reject(new Error(`${fileName} not found`));
+        console.warn(`${fileName} not found`);
         resolve({});
     });
 }

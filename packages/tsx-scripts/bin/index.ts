@@ -3,8 +3,8 @@ import { Eenvironment } from '../scripts/enum';
 import { build, dev, mock, test } from '../commands';
 import { loadEnvFile, startBuild, startDev  } from '../scripts';
 
-//@ts-ignore
-import pkg from '../package.json';
+import pkg from '../package.json' assert { type: 'json' };
+
 
 export enum ECommandMap {
     BUILD = 'build',

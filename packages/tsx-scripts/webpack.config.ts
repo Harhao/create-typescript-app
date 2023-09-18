@@ -1,17 +1,20 @@
 import webpack, { Configuration } from "webpack";
+import nodeExternals from "webpack-node-externals";
+
 import { resolve } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
-export const webpackConfig: Configuration = {
+const webpackConfig: Configuration = {
     mode: 'production',
     entry: resolve(__dirname, './bin/index.ts'),
     target: 'node',
+    externals: [nodeExternals()],
     output: {
         path: resolve(__dirname, './dist'),
         filename: 'index.cjs',
-        libraryTarget: 'umd',
+        libraryTarget: 'commonjs',
     },
     module: {
         rules: [
@@ -23,14 +26,13 @@ export const webpackConfig: Configuration = {
                     happyPackMode: true,
                     compilerOptions: {
                         sourceMap: true,
-                        module: "esnext",
                     },
                 },
             },
         ],
     },
     resolve: {
-        extensions: ['.ts', '.js'],
+        extensions: ['.ts', '.js', '.json'],
     }
 };
 

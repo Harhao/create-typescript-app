@@ -24,7 +24,7 @@ export const startDev = async (envData: Record<string, any>) => {
     try {
         const config = getWebpackDevConfig(envData) as Configuration;
 
-        const proxyConfig = await getOverrideConfig('proxy.ts') || {};
+        const proxyConfig = await getOverrideConfig('proxy.ts');
 
         const mergeConfig = {
             ...devServerConfig,
@@ -33,7 +33,7 @@ export const startDev = async (envData: Record<string, any>) => {
                 ...proxyConfig,
             }
         };
-
+        
         WebpackDevServer.addDevServerEntrypoints(config, mergeConfig);
 
         const compiler = webpack(config);
@@ -51,7 +51,8 @@ export const startDev = async (envData: Record<string, any>) => {
 
 export const startBuild = async (envData: Record<string, any>) => {
     try {
-        const config = getWebpackProdConfig(envData) as Configuration;
+        const config = await getWebpackProdConfig(envData) as Configuration;
+
         webpack(config, (err, stats: any) => {
             if (err) {
                 console.log(err);
@@ -66,7 +67,7 @@ export const startBuild = async (envData: Record<string, any>) => {
                 }) + "\n\n"
             );
             if (stats.hasErrors()) {
-                console.error("构建时候出现错误", stats);
+                // console.error("构建时候出现错误", stats);
                 process.exit(1);
             }
         })
