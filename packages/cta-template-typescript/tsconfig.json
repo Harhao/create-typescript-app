@@ -27,5 +27,5 @@
   "files": [
     "global.d.ts"
   ],
-  "include": ["src/**/*", "src/const/.ts", "global.d.ts"]
+  "include": ["**/*.ts"]
 }

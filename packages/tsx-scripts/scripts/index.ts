@@ -33,7 +33,7 @@ export const startDev = async (envData: Record<string, any>) => {
                 ...proxyConfig,
             }
         };
-        
+                
         WebpackDevServer.addDevServerEntrypoints(config, mergeConfig);
 
         const compiler = webpack(config);

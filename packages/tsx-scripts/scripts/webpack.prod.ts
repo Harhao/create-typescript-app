@@ -17,6 +17,7 @@ const getWebpackProdConfig = async (envData: Record<string, any>) => {
 
     const isDropConsole = [Eenvironment.production].includes(envData.CUSTOM_ENV);
     const srcDir = resolve(execDirectoryPath(), './src');
+    
     const config: Configuration = await getOverrideConfig('webpack.override.ts') || {};
     
     return merge(getWebpackBaseConfig(envData), {
