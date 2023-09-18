@@ -14,12 +14,10 @@
   "license": "MIT",
   "author": "harhao",
   "dependencies": {
-    "cleye": "^1.3.2",
-    "semver": "^7.5.4"
-  },
-  "devDependencies": {
     "@types/node": "^20.3.1",
     "@types/webpackbar": "^4.0.3",
+    "cleye": "^1.3.2",
+    "semver": "^7.5.4",
     "autoprefixer": "^10.4.14",
     "chalk": "^4.1.0",
     "cross-env": "^7.0.3",

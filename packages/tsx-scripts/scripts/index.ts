@@ -67,7 +67,8 @@ export const startBuild = async (envData: Record<string, any>) => {
                 }) + "\n\n"
             );
             if (stats.hasErrors()) {
-                // console.error("构建时候出现错误", stats);
+                const { errorDetails } = stats;
+                console.log("构建时候出现错误", errorDetails);
                 process.exit(1);
             }
         })

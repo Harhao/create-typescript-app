@@ -16,10 +16,7 @@ export enum ECommandMap {
 
 const getEnvData = async (runCommand: ECommandMap): Promise<Record<string, any>> => {
 
-    let envConfig: { NODE_ENV: Eenvironment; CUSTOM_ENV: Eenvironment } | null = {
-        NODE_ENV: Eenvironment.production,
-        CUSTOM_ENV: Eenvironment.production,
-    };
+    let envConfig: { NODE_ENV: Eenvironment; CUSTOM_ENV: Eenvironment } | null = null;
 
     switch (runCommand) {
         case ECommandMap.BUILD: envConfig = {
@@ -38,6 +35,10 @@ const getEnvData = async (runCommand: ECommandMap): Promise<Record<string, any>>
             NODE_ENV: Eenvironment.development,
             CUSTOM_ENV: Eenvironment.mock,
         }; break;
+        default: envConfig = {
+            NODE_ENV: Eenvironment.production,
+            CUSTOM_ENV: Eenvironment.production,
+        };break;
     }
 
     return await loadEnvFile(envConfig);

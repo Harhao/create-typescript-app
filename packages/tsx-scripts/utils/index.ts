@@ -8,8 +8,7 @@ import { execSync } from 'child_process';
 
 
 export const onGetNpmPkgVersion = () => {
-    const version = execSync(`npm view ${pkg.name} version`);
-    return version.toString().trim();
+    return execSync(`npm view ${pkg.name} version`).toString().trim();
 }
 
 export const isVersionEquote = () => {

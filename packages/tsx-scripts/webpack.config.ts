@@ -1,3 +1,4 @@
+import process from 'process';
 import webpack, { Configuration } from "webpack";
 import nodeExternals from "webpack-node-externals";
 
@@ -10,7 +11,9 @@ const webpackConfig: Configuration = {
     mode: 'production',
     entry: resolve(__dirname, './bin/index.ts'),
     target: 'node',
-    externals: [nodeExternals()],
+    externals: [
+        nodeExternals(),
+    ],
     output: {
         path: resolve(__dirname, './dist'),
         filename: 'index.cjs',
