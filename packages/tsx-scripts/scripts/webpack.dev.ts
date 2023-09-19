@@ -5,11 +5,13 @@ import { getOverrideConfig } from '../utils';
 
 import getWebpackBaseConfig from './webpack.base';
 
+
 const getWebpackDevConfig = async (envData: Record<string, any>) => {
 
-    const config: Configuration = await getOverrideConfig('webpack.override.ts');
+    const baseConfig: Configuration = getWebpackBaseConfig(envData);
+    const config: Configuration = await getOverrideConfig(baseConfig, envData.NODE_ENV, 'webpack.override.ts') || baseConfig;
     
-    return merge(getWebpackBaseConfig(envData), {
+    return merge(baseConfig, {
         //@ts-ignore
         mode: Eenvironment.development,
     }, config);

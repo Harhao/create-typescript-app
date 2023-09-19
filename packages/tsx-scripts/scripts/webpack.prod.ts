@@ -17,10 +17,12 @@ const getWebpackProdConfig = async (envData: Record<string, any>) => {
 
     const isDropConsole = [Eenvironment.production].includes(envData.CUSTOM_ENV);
     const srcDir = resolve(execDirectoryPath(), './src');
-    
-    const config: Configuration = await getOverrideConfig('webpack.override') || {};
-    
-    return merge(getWebpackBaseConfig(envData), {
+
+    const baseConfig: Configuration = getWebpackBaseConfig(envData);
+
+    const config: Configuration = await getOverrideConfig(baseConfig, envData.NODE_ENV, 'webpack.override.ts') || baseConfig;
+
+    return merge(baseConfig, {
         //@ts-ignore
         mode: Eenvironment.production,
         plugins: [
@@ -35,6 +37,7 @@ const getWebpackProdConfig = async (envData: Record<string, any>) => {
         optimization: {
             usedExports: true,
             splitChunks: {
+                //@ts-ignore
                 cacheGroups,
             },
             minimize: true,
@@ -42,7 +45,7 @@ const getWebpackProdConfig = async (envData: Record<string, any>) => {
                 new CssMinimizerPlugin(),
                 new TerserPlugin({
                     // 禁止提取文件头部注释
-                    extractComments: false, 
+                    extractComments: false,
                     terserOptions: {
                         compress: {
                             drop_console: isDropConsole, // 生成环境移除console

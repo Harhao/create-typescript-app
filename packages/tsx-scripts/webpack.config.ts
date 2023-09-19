@@ -22,13 +22,14 @@ const webpackConfig: Configuration = {
     module: {
         rules: [
             {
-                test: /\.ts$/,
+                test: /\.(ts|js)$/,
                 loader: 'ts-loader',
                 options: {
                     //开启多线程编译
                     happyPackMode: true,
                     compilerOptions: {
                         sourceMap: true,
+                        module: 'commonjs'
                     },
                 },
             },

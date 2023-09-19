@@ -5,6 +5,7 @@ import pkg from '../package.json' assert { type: 'json' };
 
 import { resolve } from 'path';
 import { execSync } from 'child_process';
+import { Configuration } from 'webpack';
 
 
 export const onGetNpmPkgVersion = () => {
@@ -20,7 +21,11 @@ export const execDirectoryPath = () => {
     return process.cwd();
 }
 
-export const getOverrideConfig = async (fileName: string): Promise<Record<string, any>> => {
+export const getOverrideConfig = async (
+    config: Configuration, 
+    env: string, 
+    fileName: string,
+): Promise<Record<string, any>> => {
 
     const overridePath = resolve(execDirectoryPath(), fileName);
 
