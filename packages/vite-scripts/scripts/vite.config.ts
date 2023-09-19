@@ -14,7 +14,7 @@ const getCommonConfig = (envData: Record<string, any>) => {
         mode: envData.NODE_ENV,
         resolve: {
             alias: {
-                '@': resolve(execDirectoryPath(), '../src'),
+                '@': resolve(execDirectoryPath(), './src'),
             },
             extensions: [
                 '.tsx', 
@@ -56,7 +56,11 @@ export const getDevConfig = async (envData: Record<string, any>) => {
     const { server, ...restConfig } = devServerConfig;
     const { proxy, ...otherConfig } = server;
 
-    const proxyConfig = await getOverrideConfig('proxy.ts') || {};
+    const proxyConfig = await getOverrideConfig(
+        commonConfig,
+        envData.NODE_ENV, 
+        './override/proxy.cjs',
+    );
 
     return mergeConfig({
         ...restConfig,

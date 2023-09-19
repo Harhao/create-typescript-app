@@ -9,11 +9,12 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development CUSTOM_ENV=development ts-node --esm ./bin/index.ts dev",
     "build": "rimraf dist && ts-node --esm ./webpack.config.ts",
-    "test": "yarn build && node ./dist/index.cjs dev"
+    "test": "yarn build && node ./dist/index.cjs build"
   },
   "license": "MIT",
   "author": "harhao",
   "dependencies": {
+    "@sentry/webpack-plugin": "^2.7.1",
     "@types/node": "^20.3.1",
     "@types/webpackbar": "^4.0.3",
     "autoprefixer": "^10.4.14",

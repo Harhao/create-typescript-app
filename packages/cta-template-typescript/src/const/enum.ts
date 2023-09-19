@@ -1,12 +1,3 @@
-// 200	Number	200	成功
-// 202	Number	202	请求参数异常
-// 207	Number	207	服务内部错误
-// 208	Number	208	服务依赖异常
-// 1001	Number	1001	文件不合规
-// 1002	Number	1002	文件大小超过限制
-// 1004	Number	1004	需要验证手机号
-// 1005	Number	1005	已点过赞
-
 // 接口返回状态
 export enum EResponseCode {
     SUCCESS = 200,

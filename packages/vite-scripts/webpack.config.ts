@@ -11,7 +11,7 @@ export const webpackConfig: Configuration = {
     output: {
         path: resolve(__dirname, './dist'),
         filename: 'index.cjs',
-        libraryTarget: 'umd',
+        libraryTarget: 'commonjs',
     },
     module: {
         rules: [

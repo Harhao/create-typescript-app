@@ -9,7 +9,11 @@ import getWebpackBaseConfig from './webpack.base';
 const getWebpackDevConfig = async (envData: Record<string, any>) => {
 
     const baseConfig: Configuration = getWebpackBaseConfig(envData);
-    const config: Configuration = await getOverrideConfig(baseConfig, envData.NODE_ENV, 'webpack.override.ts') || baseConfig;
+    const config: Configuration = await getOverrideConfig(
+        baseConfig, 
+        envData.NODE_ENV, 
+        './override/webpack.override.cjs',
+    ) || baseConfig;
     
     return merge(baseConfig, {
         //@ts-ignore

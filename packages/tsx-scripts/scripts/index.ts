@@ -3,11 +3,13 @@ import path from 'path';
 import ora from 'ora';
 import chalk from 'chalk';
 import dotenv from 'dotenv';
+
 import webpack, { Configuration } from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import getWebpackDevConfig from './webpack.dev';
 import getWebpackProdConfig from './webpack.prod';
 
+import { rimrafSync } from 'rimraf';
 import { execDirectoryPath, getOverrideConfig } from '../utils';
 import { devServerConfig, printUrl } from '../config';
 
@@ -24,7 +26,11 @@ export const startDev = async (envData: Record<string, any>) => {
     try {
         const config = await getWebpackDevConfig(envData) as Configuration;
 
-        const proxyConfig = await getOverrideConfig('proxy.ts') || {};
+        const proxyConfig = await getOverrideConfig(
+            config, 
+            envData.NODE_ENV, 
+            './override/proxy.cjs',
+        );
 
         const mergeConfig = {
             ...devServerConfig,
@@ -38,6 +44,7 @@ export const startDev = async (envData: Record<string, any>) => {
 
         const compiler = webpack(config);
         const server = new WebpackDevServer(compiler, mergeConfig);
+        
         server.listen(mergeConfig.port, mergeConfig.host, () => {
             spinner.succeed(chalk.greenBright('✨ 构建成功啦～'));
             printUrl(server);
@@ -51,7 +58,12 @@ export const startDev = async (envData: Record<string, any>) => {
 
 export const startBuild = async (envData: Record<string, any>) => {
     try {
-        const config = await getWebpackProdConfig(envData) as Configuration;
+
+        const deleteDir = path.resolve(execDirectoryPath(), './dist');
+
+        const config = await getWebpackProdConfig(envData) as Configuration; 
+
+        fs.existsSync(deleteDir) && rimrafSync(deleteDir);
 
         webpack(config, (err, stats: any) => {
             if (err) {
@@ -74,14 +86,13 @@ export const startBuild = async (envData: Record<string, any>) => {
         })
     } catch (e) {
         console.log('失败原因', e);
-    } finally {
-        // uploadSourceMap();
     }
 }
 
 export const loadEnvFile = (envConfig): Promise<IEnvDataConfig> => {
 
     return new Promise(resolve => {
+        
         const { NODE_ENV, CUSTOM_ENV } = envConfig;
 
         const spinner = ora('加载环境配置').start();

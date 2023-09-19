@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import semver from 'semver';
 
 import pkg from '../package.json' assert { type: 'json' };
@@ -22,24 +23,29 @@ export const execDirectoryPath = () => {
 }
 
 export const getOverrideConfig = async (
-    config: Configuration, 
+    config: Record<string, any>, 
     env: string, 
     fileName: string,
 ): Promise<Record<string, any>> => {
 
-    const overridePath = resolve(execDirectoryPath(), fileName);
+    const overridePath = path.resolve(execDirectoryPath(), fileName);
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
+
         if (fs.existsSync(overridePath)) {
-            import(overridePath).then((config) => {
-                resolve(config.default);
-            }).catch(e => {
-                console.error(e);
-                reject(e);
-            });
-            return;
+
+            const overrideFn = eval('require')(overridePath);
+
+            if (typeof overrideFn === 'function') {
+                const overrideConfig = overrideFn(config, env);
+
+                resolve(overrideConfig);
+                return;
+            }
+            resolve({});
+        }  else {
+            console.warn(`\n${fileName} not found\n`);
+            resolve({});
         }
-        console.warn(`\n${fileName} not found\n`);
-        resolve({});
     });
 }

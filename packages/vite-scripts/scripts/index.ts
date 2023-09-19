@@ -4,7 +4,7 @@ import ora from 'ora';
 import chalk from 'chalk';
 import dotenv from 'dotenv';
 
-import { createServer, build, preview } from 'vite';
+import { createServer, build } from 'vite';
 import { execDirectoryPath } from '../utils';
 import { getDevConfig, getProdConfig } from './vite.config';
 
@@ -36,20 +36,6 @@ export const startBuild = async (envData: Record<string, any>) => {
     try {
         const config = getProdConfig(envData);
         const buildRes = await build(config);
-        spinner.succeed(chalk.green('🚀 服务构建成功'));
-
-    } catch (e) {
-        spinner.fail('构建失败啦');
-        console.log('失败原因', e);
-    }
-}
-
-export const startPreview = async (envData: Record<string, any>) => {
-
-    const spinner = ora('✨ 构建产物中').start();
-    try {
-        const config = getProdConfig(envData);
-        const previewRes = await preview(config);
         spinner.succeed(chalk.green('🚀 服务构建成功'));
 
     } catch (e) {

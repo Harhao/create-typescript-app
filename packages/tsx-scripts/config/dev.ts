@@ -14,23 +14,7 @@ export const devServerConfig = {
     overlay: false,
     contentBase: resolve(workDirectory, './dist'),
     quiet: true,
-    proxy: {
-        '/api': {
-            target: 'https://www.target.com',
-            changeOrigin: true,
-            pathRewrite: { '^/api': '' },
-        },
-        '/wx': {
-            target: 'https://www.target.com/wx',
-            changeOrigin: true,
-            pathRewrite: { '^/wx': '' },
-        },
-        '/mock': {
-            target: 'http://localhost:4000',
-            changeOrigin: true,
-            pathRewrite: { '^/mock': '' },
-        }
-    },
+    proxy: {},
 };
 export const printUrl = (server) => {
     const protocol = server.https ? 'https' : 'http';

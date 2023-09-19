@@ -6,7 +6,9 @@ import { execDirectoryPath } from '../utils';
 const workDirectory = execDirectoryPath();
 
 export const getEntrys = () => {
-    const entryPaths = {};
+    const entryPaths = {
+        index: resolve(workDirectory, )
+    };
     const entryDirs = resolve(workDirectory, './public');
     const dirs = fs.readdirSync(entryDirs);
     //遍历文件夹dirs   

@@ -10,6 +10,9 @@ import { Eenvironment } from './enum';
 import { cacheGroups } from '../config';
 import { Configuration } from 'webpack';
 import { PurgeCSSPlugin } from 'purgecss-webpack-plugin';
+import { sentryWebpackPlugin } from "@sentry/webpack-plugin";
+
+import { sentryConfig } from '../config';
 import { execDirectoryPath, getOverrideConfig } from '../utils';
 
 
@@ -20,7 +23,17 @@ const getWebpackProdConfig = async (envData: Record<string, any>) => {
 
     const baseConfig: Configuration = getWebpackBaseConfig(envData);
 
-    const config: Configuration = await getOverrideConfig(baseConfig, envData.NODE_ENV, 'webpack.override.ts') || baseConfig;
+    const config: Configuration = await getOverrideConfig(
+        baseConfig, 
+        envData.NODE_ENV, 
+        './override/webpack.override.cjs',
+    ) || baseConfig;
+
+    const sentryOverride = await getOverrideConfig(
+        sentryConfig, 
+        envData.NODE_ENV, 
+        './override/sentry.config.cjs',
+    );
 
     return merge(baseConfig, {
         //@ts-ignore
@@ -33,6 +46,7 @@ const getWebpackProdConfig = async (envData: Record<string, any>) => {
             new PurgeCSSPlugin({
                 paths: glob.sync(`${srcDir}/**/*`, { nodir: true })
             }),
+            sentryWebpackPlugin(sentryOverride),
         ],
         optimization: {
             usedExports: true,

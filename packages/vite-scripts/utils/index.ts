@@ -1,14 +1,14 @@
 import fs from 'fs';
+import path from 'path';
 import semver from 'semver';
-import pkg from '../package.json' assert { type: 'json'};
 
-import { resolve } from 'path';
+import pkg from '../package.json' assert { type: 'json' };
+
 import { execSync } from 'child_process';
 
 
 export const onGetNpmPkgVersion = () => {
-    const version = execSync(`npm view ${pkg.name} version`);
-    return version.toString().trim();
+    return execSync(`npm view ${pkg.name} version`).toString().trim();
 }
 
 export const isVersionEquote = () => {
@@ -20,19 +20,30 @@ export const execDirectoryPath = () => {
     return process.cwd();
 }
 
-export const getOverrideConfig = (fileName: string): Promise<Record<string, any>> => {
-    const overridePath = resolve(execDirectoryPath(), fileName);
+export const getOverrideConfig = async (
+    config: Record<string, any>, 
+    env: string, 
+    fileName: string,
+): Promise<Record<string, any>> => {
 
-    return new Promise((resolve, reject) => {
+    const overridePath = path.resolve(execDirectoryPath(), fileName);
+
+    return new Promise((resolve) => {
+
         if (fs.existsSync(overridePath)) {
-            import(overridePath).then((config) => {
-                resolve(config.default);
-            }).catch(e => {
-                console.error(e);
-                reject(e);
-            });
-            return;
+
+            const overrideFn = eval('require')(overridePath);
+
+            if (typeof overrideFn === 'function') {
+                const overrideConfig = overrideFn(config, env);
+
+                resolve(overrideConfig);
+                return;
+            }
+            resolve({});
+        }  else {
+            console.warn(`\n${fileName} not found\n`);
+            resolve({});
         }
-        reject(new Error(`${fileName} not found`));
     });
 }

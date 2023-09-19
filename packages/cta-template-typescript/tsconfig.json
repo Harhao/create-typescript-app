@@ -27,5 +27,5 @@
   "files": [
     "global.d.ts"
   ],
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "webpack.override.js", "override/proxy.cjs", "override/sentry.config.cjs", "override/webpack.override.cjs"]
 }

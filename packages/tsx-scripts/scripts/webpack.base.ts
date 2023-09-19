@@ -34,7 +34,7 @@ const getWebpackBaseConfig = (envData: Record<string, any>) => ({
     module: {
         rules: [
             {
-                test: /\.(tsx?|js)$/,
+                test: /\.(tsx?|js|jsx|mjs|cjs)$/,
                 use: [
                     {
                         loader: resolve(__dirname, "../node_modules", "thread-loader"),
