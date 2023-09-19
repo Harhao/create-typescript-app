@@ -1,38 +1,42 @@
-import webpack, { Configuration } from "webpack";
 import process from 'process';
+import webpack, { Configuration } from "webpack";
+import nodeExternals from "webpack-node-externals";
 
 import { resolve } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
-export const webpackConfig: Configuration = {
+const webpackConfig: Configuration = {
     mode: 'production',
     entry: resolve(__dirname, './bin/index.ts'),
     target: 'node',
+    externals: [
+        nodeExternals(),
+    ],
     output: {
         path: resolve(__dirname, './dist'),
         filename: 'index.cjs',
-        libraryTarget: 'umd',
+        libraryTarget: 'commonjs',
     },
     module: {
         rules: [
             {
-                test: /\.ts$/,
+                test: /\.(ts|js)$/,
                 loader: 'ts-loader',
                 options: {
                     //开启多线程编译
                     happyPackMode: true,
                     compilerOptions: {
                         sourceMap: true,
-                        module: "esnext",
+                        module: 'commonjs'
                     },
                 },
             },
         ],
     },
     resolve: {
-        extensions: ['.ts', '.js'],
+        extensions: ['.ts', '.js', '.json'],
     }
 };
 
