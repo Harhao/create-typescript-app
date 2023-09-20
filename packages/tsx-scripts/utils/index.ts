@@ -1,22 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import semver from 'semver';
-
-import pkg from '../package.json' assert { type: 'json' };
-
-import { resolve } from 'path';
-import { execSync } from 'child_process';
-import { Configuration } from 'webpack';
-
-
-export const onGetNpmPkgVersion = () => {
-    return execSync(`npm view ${pkg.name} version`).toString().trim();
-}
-
-export const isVersionEquote = () => {
-    const version = onGetNpmPkgVersion();
-    return semver.eq(version, pkg.version);
-}
 
 export const execDirectoryPath = () => {
     return process.cwd();
