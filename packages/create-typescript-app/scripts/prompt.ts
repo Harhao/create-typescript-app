@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { input, select } from '@inquirer/prompts';
 
 
@@ -5,12 +6,17 @@ export const getPrompts = async () => {
 
     const answers = {
         template: await select({
-            message: '请选择你要下载的模版',
+            message: '请选择开发依赖的模版',
             choices: [
                 {
-                    name: 'cta-template-typescript',
+                    name: 'react + typescript 模版',
                     value: 'cta-template-typescript',
-                    description: 'cta-template-typescript is a react typescript scaffold.'
+                    description: chalk.green('\ncta-template-typescript是react typescript模版。')
+                },
+                {
+                    name: 'vite + react + typescript模版',
+                    value: 'cta-template-vite-typescript',
+                    description: chalk.green('\ncta-template-vite-typescriptt是react typescript模版。')
                 }
             ]
         }),
