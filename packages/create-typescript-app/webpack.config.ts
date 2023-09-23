@@ -4,6 +4,7 @@ import nodeExternals from "webpack-node-externals";
 
 import { resolve } from "path";
 import { fileURLToPath } from "url";
+import { AddShebangPlugin } from './plugin';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -37,7 +38,10 @@ const webpackConfig: Configuration = {
     },
     resolve: {
         extensions: ['.ts', '.js', '.json'],
-    }
+    },
+    plugins: [
+        new AddShebangPlugin(),
+    ]
 };
 
 const buildScript = () => {
