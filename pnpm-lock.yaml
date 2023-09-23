@@ -50,6 +50,12 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
 
+  packages/create-typescript-app/my-app:
+    dependencies:
+      tsx-scripts:
+        specifier: ^0.0.2
+        version: link:../../tsx-scripts
+
   packages/cta-template-typescript: {}
 
   packages/my-app: {}

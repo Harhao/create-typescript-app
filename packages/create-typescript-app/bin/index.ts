@@ -47,9 +47,8 @@ const startCommand = async () => {
 
         process.chdir(answers.projectName);
 
-        // const packageDependencies = ['tsx-scripts', answers.template];
+        const packageDependencies = ['tsx-scripts', answers.template];
 
-        const packageDependencies = [answers.template];
 
         await onInitPackageJson(answers);
 

@@ -1,6 +1,6 @@
 {
   "name": "tsx-scripts",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "tsx-script build cli",
   "type": "module",
   "bin": {

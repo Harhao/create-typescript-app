@@ -37,13 +37,13 @@ const getWebpackBaseConfig = (envData: Record<string, any>) => ({
                 test: /\.(tsx?|js|jsx|mjs|cjs)$/,
                 use: [
                     {
-                        loader: resolve(__dirname, "../node_modules", "thread-loader"),
+                        loader: resolve(process.cwd(), "./node_modules", "thread-loader"),
                         options: {
                             workers: workerCount,
                         },
                     },
                     {
-                        loader:  resolve(__dirname, "../node_modules", "ts-loader"),
+                        loader:  resolve(process.cwd(), "./node_modules", "ts-loader"),
                         options: {
                             //开启多线程编译
                             happyPackMode: true,
@@ -59,10 +59,10 @@ const getWebpackBaseConfig = (envData: Record<string, any>) => ({
                 test: /\.(css|less)$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    resolve(__dirname, "../node_modules", "css-loader"),
-                    resolve(__dirname, "../node_modules", "less-loader"),
+                    resolve(process.cwd(), "./node_modules", "css-loader"),
+                    resolve(process.cwd(), "./node_modules", "less-loader"),
                     {
-                        loader:  resolve(__dirname, "../node_modules", 'postcss-loader'),
+                        loader:  resolve(process.cwd(), "./node_modules", 'postcss-loader'),
                         options: {
                             postcssOptions: {
                                 plugins: [
