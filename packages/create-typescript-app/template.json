@@ -1,0 +1,7 @@
+{
+    "name": "<%= projectName %>",
+    "version": "<%= version %>",
+    "description": "<%= description%> ",
+    "license": "<%= license %>",
+    "author": "<%= author %>"
+}

@@ -22,11 +22,11 @@ export const getPrompts = async () => {
         }),
         projectName: await input({
             message: "请输入项目名称?",
-            default: 'cta-template-typescript'
+            default: 'my-app'
         }),
         version: await input({
             message: "请输入版本号?",
-            default: '1.0.0',
+            default: '0.0.1',
         }),
         description: await input({
             message: "请输入项目描述?",
@@ -35,7 +35,20 @@ export const getPrompts = async () => {
         author: await input({
             message: "请输入作者?",
             default: 'author',
-        })
+        }),
+        license: await await select({
+            message: '请选择开发依赖的许可',
+            choices: [
+                {
+                    name: 'MIT',
+                    value: 'MIT',
+                },
+                {
+                    name: 'ISC',
+                    value: 'ISC',
+                }
+            ]
+        }),
     };
     return answers;
 }
