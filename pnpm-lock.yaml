@@ -52,6 +52,8 @@ importers:
 
   packages/cta-template-typescript: {}
 
+  packages/my-app: {}
+
   packages/tsx-scripts:
     dependencies:
       '@sentry/webpack-plugin':

@@ -1,11 +1,12 @@
 {
   "name": "tsx-scripts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "tsx-script build cli",
   "type": "module",
   "bin": {
     "tsx-scripts": "./dist/index.cjs"
   },
+  "main": "./dist/index.cjs",
   "scripts": {
     "start": "cross-env NODE_ENV=development CUSTOM_ENV=development ts-node --esm ./bin/index.ts dev",
     "build": "rimraf dist && ts-node --esm ./webpack.config.ts",
