@@ -36,28 +36,28 @@ const startCommand = async () => {
         });
 
         //检查脚手架版本
-        // const isLatest = await checkCliVersion();
+        const isLatest = await checkCliVersion();
 
 
         // if (isLatest) {
-        //询问prompts
-        const answers = await getPrompts();
+            //询问prompts
+            const answers = await getPrompts();
 
-        fs.ensureDirSync(answers.projectName);
+            fs.ensureDirSync(answers.projectName);
 
-        process.chdir(answers.projectName);
+            process.chdir(answers.projectName);
 
-        const packageDependencies = ['tsx-scripts', answers.template];
-
-
-        await onInitPackageJson(answers);
+            const packageDependencies = ['tsx-scripts', answers.template];
 
 
-        await onInstallPackage(packageDependencies);
+            await onInitPackageJson(answers);
 
-        onInitTemplateFile(answers);
 
-        onInstallDependencies();
+            await onInstallPackage(packageDependencies);
+
+            onInitTemplateFile(answers);
+
+            onInstallDependencies();
         // }
 
     } catch (e) {
@@ -72,9 +72,12 @@ const onInitPackageJson = (answers: Record<string, any>): Promise<void> => {
 
     return new Promise((resolve,) => {
 
-
-        const prefixJson = JSON.parse(ejs.render(JSON.stringify(templateJson), answers));
-
+        const prefixJson = JSON.parse(
+            ejs.render(
+                JSON.stringify(templateJson), 
+                answers,
+            )
+        );
 
         fs.writeFileSync(
             pkgPath,
@@ -168,4 +171,9 @@ const onInstallDependencies = () => {
         });
     })
 }
+
+const onGetInstallTools = () => {
+    
+}
+
 startCommand();
