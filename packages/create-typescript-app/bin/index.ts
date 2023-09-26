@@ -20,7 +20,15 @@ process.on('unhandledRejection', err => {
 
 const checkCliVersion = async () => {
     try {
-        return await isVersionEquote();
+        const isLatest:boolean =  await isVersionEquote();
+        if (!isLatest) {
+            console.log(chalk.red(`您的${pkg.name} ${pkg.version}脚手架版本过低`));
+            console.log(chalk.red(`====================================`));
+            console.log(chalk.red(`yarn add ${pkg.name} -global`));
+            console.log(chalk.red(`npm install -g ${pkg.name}`));
+            console.log(chalk.red(`====================================`));
+            process.exit(1);
+        }
     } catch (e) {
         console.error(`checkCliVersion ${e}`);
     }
@@ -31,34 +39,32 @@ const startCommand = async () => {
         cli({
             name: pkg.name,
             version: pkg.version,
-            alias: ['cta', 'c-ts-a', 'c-ts-app'],
+            alias: ['tac', 'tacli', 'ts-app'],
             commands: [],
         });
 
         //检查脚手架版本
-        const isLatest = await checkCliVersion();
+        await checkCliVersion();
 
 
-        // if (isLatest) {
-            //询问prompts
-            const answers = await getPrompts();
+        //询问prompts
+        const answers = await getPrompts();
 
-            fs.ensureDirSync(answers.projectName);
+        fs.ensureDirSync(answers.projectName);
 
-            process.chdir(answers.projectName);
+        process.chdir(answers.projectName);
 
-            const packageDependencies = ['tsx-scripts', answers.template];
-
-
-            await onInitPackageJson(answers);
+        const packageDependencies = ['tsx-scripts', answers.template];
 
 
-            await onInstallPackage(packageDependencies);
+        await onInitPackageJson(answers);
 
-            onInitTemplateFile(answers);
 
-            onInstallDependencies();
-        // }
+        await onInstallPackage(packageDependencies);
+
+        onInitTemplateFile(answers);
+
+        onInstallDependencies();
 
     } catch (e) {
         console.log('startCommand error', e);
@@ -74,7 +80,7 @@ const onInitPackageJson = (answers: Record<string, any>): Promise<void> => {
 
         const prefixJson = JSON.parse(
             ejs.render(
-                JSON.stringify(templateJson), 
+                JSON.stringify(templateJson),
                 answers,
             )
         );
@@ -126,12 +132,12 @@ const onInitTemplateFile = (answers): Promise<void> => {
         const { dependencies } = currentPkg;
 
         delete dependencies[answers.template];
-    
+
         const packageJSon = lodash.merge(currentPkg, templatePkg.package);
-    
+
         packageJSon.dependencies = sort(packageJSon.dependencies);
-    
-    
+
+
         fs.writeFileSync(
             currentPkgPath,
             JSON.stringify(packageJSon, null, 2) + os.EOL,
@@ -140,9 +146,9 @@ const onInitTemplateFile = (answers): Promise<void> => {
                 encoding: 'utf8'
             }
         );
-    
+
         fs.copySync(`${appPath}/template`, process.cwd());
-    
+
         fs.removeSync(appPath);
 
         resolve();
@@ -170,10 +176,6 @@ const onInstallDependencies = () => {
             resolve(true);
         });
     })
-}
-
-const onGetInstallTools = () => {
-    
 }
 
 startCommand();

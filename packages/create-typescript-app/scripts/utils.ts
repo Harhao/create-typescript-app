@@ -4,7 +4,7 @@ import pkg from '../package.json' assert { type: 'json' };
 
 import { execSync } from 'child_process';
 
-export const onGetNpmPkgVersion = () => {
+export const onGetNpmPkgVersion = (): Promise<string> => {
     return new Promise((resolve, reject) => {
         https
             .get(
@@ -30,6 +30,7 @@ export const onGetNpmPkgVersion = () => {
 
 export const isVersionEquote = async () => {
     const version = await onGetNpmPkgVersion();
+    console.log('version', version, pkg.version);
     return semver.eq(version, pkg.version);
 }
 
