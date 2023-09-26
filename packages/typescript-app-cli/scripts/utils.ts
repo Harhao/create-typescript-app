@@ -30,7 +30,6 @@ export const onGetNpmPkgVersion = (): Promise<string> => {
 
 export const isVersionEquote = async () => {
     const version = await onGetNpmPkgVersion();
-    console.log('version', version, pkg.version);
     return semver.eq(version, pkg.version);
 }
 
