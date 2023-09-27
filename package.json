@@ -7,12 +7,16 @@
     "tsx:build": "pnpm --filter tsx-scripts build",
     "tsx:start": "pnpm --filter tsx-scripts start",
     "tsx:test": "pnpm --filter tsx-scripts test",
-    "vite:build": "pnpm --filter vite-scripts build",
-    "vite:start": "pnpm --filter vite-scripts start",
-    "vite:test": "pnpm --filter vite-scripts test",
-    "cta:build": "pnpm --filter create-typescript-app build"
+    "cta:build": "pnpm --filter create-typescript-app build",
+    "publish-all": "lerna version && lerna publish"
   },
   "keywords": [],
   "author": "harhao",
-  "license": "MIT"
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^6.5.1"
+  }
 }

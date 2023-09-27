@@ -70,5 +70,8 @@
     "sideEffects": [
       "*.css"
     ]
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
