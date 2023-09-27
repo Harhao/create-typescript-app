@@ -1,6 +1,6 @@
 {
   "name": "cta-template-typescript",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "cta-template-typescript is a react typescript scaffold",
   "package": {
     "main": "./dist/index.html",
@@ -48,9 +48,9 @@
       "sideEffects": [
         "*.css"
       ]
-    },
-    "publishConfig": {
-      "registry": "https://registry.npmjs.org/"
     }
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
