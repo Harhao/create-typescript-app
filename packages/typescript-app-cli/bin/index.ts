@@ -17,14 +17,19 @@ process.on('unhandledRejection', err => {
     throw err;
 });
 
+process.on('SIGINT', () => {
+    // 执行清理操作或记录日志
+    console.log('用户退出程序');
+    process.exit(0); // 退出程序
+});
 
 const checkCliVersion = async () => {
     try {
-        const isLatest:boolean =  await isVersionEquote();
+        const isLatest: boolean = await isVersionEquote();
         if (!isLatest) {
             console.log(chalk.red(`您的${pkg.name} ${pkg.version}脚手架版本过低`));
             console.log(chalk.red(`====================================`));
-            console.log(chalk.red(`yarn add ${pkg.name} -global`));
+            console.log(chalk.red(`yarn global add ${pkg.name}`));
             console.log(chalk.red(`npm install -g ${pkg.name}`));
             console.log(chalk.red(`====================================`));
             process.exit(1);
@@ -56,18 +61,24 @@ const startCommand = async () => {
 
         const packageDependencies = ['tsx-scripts', answers.template];
 
-
+        // 初始化项目package.json 文件
         await onInitPackageJson(answers);
 
-
+        // 安装项目模版和集成运行命令tsx-scripts
         await onInstallPackage(packageDependencies);
 
-        onInitTemplateFile(answers);
+        // 安装处理项目模版生成逻辑
+        await onInitTemplateFile(answers);
 
-        onInstallDependencies();
+        // 安装项目开发依赖包
+        const isInstallSucc =  await onInstallDependencies();
+
+        if (isInstallSucc) {
+            afterInstallLog(answers);
+        }
 
     } catch (e) {
-        console.log('startCommand error', e);
+        console.log(chalk.red('startCommand error', e));
     }
 }
 
@@ -100,7 +111,7 @@ const onInstallPackage = (dependencies: string[]): Promise<boolean> => {
 
         console.log(chalk.green('install dependencies...'), dependencies);
 
-        const args = ['add', ...dependencies, '--save'];
+        const args = ['add', ...dependencies, '--save', '--silent'];
 
         const child = spawn('yarn', args, {
             cwd: process.cwd(),
@@ -155,6 +166,8 @@ const onInitTemplateFile = (answers): Promise<void> => {
     });
 }
 
+
+// 安装项目其他dependencies
 const onInstallDependencies = () => {
 
     return new Promise((resolve) => {
@@ -162,7 +175,7 @@ const onInstallDependencies = () => {
         console.log(chalk.green('install project dependencies...'));
 
 
-        const child = spawn('yarn', ['install'], {
+        const child = spawn('yarn', ['install', '--silent'], {
             cwd: process.cwd(),
             stdio: 'inherit',
         });
@@ -172,10 +185,20 @@ const onInstallDependencies = () => {
                 resolve(false);
                 return;
             }
-            console.log(chalk.green('install success~'));
             resolve(true);
         });
     })
+}
+
+const afterInstallLog = (answers) => {
+    console.log('\n');
+    console.log(chalk.green('project init success~'));
+    console.log('then you can run the command');
+    console.log(chalk.green(`cd ${answers.projectName}\n`));
+    console.log('in develop environment');
+    console.log(chalk.blue('yarn dev\n'));
+    console.log('in production environment');
+    console.log(chalk.blue('yarn build\n'));
 }
 
 startCommand();

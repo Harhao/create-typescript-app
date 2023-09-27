@@ -14,13 +14,16 @@ const plugins = getHtmlPlugins();
 const workDirectory = execDirectoryPath();
 
 const getWebpackBaseConfig = (envData: Record<string, any>) => ({
+    cache: {
+        type: 'memory',
+    },
     entry: {
         ...getEntrys(),
     },
     output: {
         globalObject: 'window',
-        filename: 'static/js/[name]_[chunkhash:8].bundle.js',
-        chunkFilename: 'static/js/[chunkhash:8].chunk.js',
+        filename: 'static/js/[name]_[contenthash:8].bundle.js',
+        chunkFilename: 'static/js/[contenthash:8].chunk.js',
         path: resolve(workDirectory, "./dist"),
         publicPath: envData.PUBLIC_PATH,
     },
@@ -43,7 +46,7 @@ const getWebpackBaseConfig = (envData: Record<string, any>) => ({
                         },
                     },
                     {
-                        loader:  resolve(process.cwd(), "./node_modules", "ts-loader"),
+                        loader: resolve(process.cwd(), "./node_modules", "ts-loader"),
                         options: {
                             //开启多线程编译
                             happyPackMode: true,
@@ -62,7 +65,7 @@ const getWebpackBaseConfig = (envData: Record<string, any>) => ({
                     resolve(process.cwd(), "./node_modules", "css-loader"),
                     resolve(process.cwd(), "./node_modules", "less-loader"),
                     {
-                        loader:  resolve(process.cwd(), "./node_modules", 'postcss-loader'),
+                        loader: resolve(process.cwd(), "./node_modules", 'postcss-loader'),
                         options: {
                             postcssOptions: {
                                 plugins: [

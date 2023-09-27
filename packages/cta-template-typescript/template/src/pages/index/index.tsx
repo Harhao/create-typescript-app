@@ -10,7 +10,7 @@ import './index.less';
 export default function App() {
     return (
         <StoreProvider {...defaultValue}>
-                <Router />
+            <Router />
         </StoreProvider>
     );
 }
