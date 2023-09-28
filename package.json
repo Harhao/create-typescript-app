@@ -7,7 +7,6 @@
     "tsx:build": "pnpm --filter tsx-scripts build",
     "tsx:start": "pnpm --filter tsx-scripts start",
     "tsx:test": "pnpm --filter tsx-scripts test",
-    "cta:build": "pnpm --filter create-typescript-app build",
     "publish-all": "lerna version && lerna publish"
   },
   "keywords": [],
@@ -17,6 +16,28 @@
     "packages/*"
   ],
   "devDependencies": {
-    "lerna": "^6.5.1"
+    "@commitlint/cli": "8.3.5",
+    "@commitlint/config-conventional": "8.3.4",
+    "@commitlint/types": "^17.4.4",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
+    "lerna": "^6.5.1",
+    "eslint": "^8.37.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.0.5",
+    "stylelint": "^15.3.0",
+    "stylelint-scss": "^4.6.0"
+  },
+  "lint-staged": {
+    "packages/**/*.{ts,tsx,js}": [
+      "eslint --ignore-path .lint/ignore/.eslintignore --config .lint/config/.eslintrc.json --fix"
+    ],
+    "*.{md,json,yml}": [
+      "prettier --trailing-comma es5 --single-quote --write --ignore-path .lint/ignore/.prettierignore"
+    ],
+    "packages/**/*.less": [
+      "stylelint --config .lint/config/.stylelintrc.json"
+    ]
   }
 }
