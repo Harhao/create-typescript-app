@@ -1,7 +1,7 @@
 import { cli } from 'cleye';
 import { Eenvironment } from '../scripts/enum';
 import { build, dev, mock, test } from '../commands';
-import { loadEnvFile, startBuild, startDev  } from '../scripts';
+import { loadEnvFile, startBuild, startDev } from '../scripts';
 
 import pkg from '../package.json' assert { type: 'json' };
 
@@ -29,7 +29,7 @@ const getEnvData = async (runCommand: ECommandMap): Promise<Record<string, any>>
         }; break;
         case ECommandMap.TEST: envConfig = {
             NODE_ENV: Eenvironment.production,
-            CUSTOM_ENV: Eenvironment.development,
+            CUSTOM_ENV: Eenvironment.test,
         }; break;
         case ECommandMap.MOCK: envConfig = {
             NODE_ENV: Eenvironment.development,
@@ -38,7 +38,7 @@ const getEnvData = async (runCommand: ECommandMap): Promise<Record<string, any>>
         default: envConfig = {
             NODE_ENV: Eenvironment.production,
             CUSTOM_ENV: Eenvironment.production,
-        };break;
+        }; break;
     }
 
     return await loadEnvFile(envConfig);

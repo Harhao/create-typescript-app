@@ -11,11 +11,10 @@ class CommonRequest {
         this.request = this.initAxiosInstance();
     }
     public static getInstance() {
-        // if (!this.singleInstance) {
-        //     this.singleInstance = new CommonRequest();
-        // }
-        // return this.singleInstance;
-        return new CommonRequest();
+        if (!this.singleInstance) {
+            this.singleInstance = new CommonRequest();
+        }
+        return this.singleInstance;
     }
 
     public changeBaseURL(url: string) {
@@ -62,8 +61,7 @@ class CommonRequest {
 
     public async fetch(params: IRequestParams): Promise<IResponseData> {
         const sepSymbol = params.url.includes('?') ? '&' : '?';
-        // const completeUrl = params.url.startsWith('/') ? `${params.url}` : `/${params.url}`;
-        const completeUrl = params.url;
+        const completeUrl = params.url.startsWith('/') ? `${params.url}` : `/${params.url}`;
 
         const data = params.method.toLowerCase() === 'get' ? [{
             Headers: params?.headers || {
