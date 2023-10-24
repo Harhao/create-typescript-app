@@ -29,7 +29,7 @@ const getEnvData = async (runCommand: ECommandMap): Promise<Record<string, any>>
         }; break;
         case ECommandMap.TEST: envConfig = {
             NODE_ENV: Eenvironment.production,
-            CUSTOM_ENV: Eenvironment.development,
+            CUSTOM_ENV: Eenvironment.test,
         }; break;
         case ECommandMap.MOCK: envConfig = {
             NODE_ENV: Eenvironment.development,
