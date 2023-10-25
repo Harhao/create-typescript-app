@@ -63,7 +63,6 @@ const getWebpackBaseConfig = (envData: Record<string, any>) => ({
                 use: [
                     MiniCssExtractPlugin.loader,
                     resolve(process.cwd(), "./node_modules", "css-loader"),
-                    resolve(process.cwd(), "./node_modules", "less-loader"),
                     {
                         loader: resolve(process.cwd(), "./node_modules", 'postcss-loader'),
                         options: {
@@ -79,7 +78,8 @@ const getWebpackBaseConfig = (envData: Record<string, any>) => ({
                                 ]
                             }
                         }
-                    }
+                    },
+                    resolve(process.cwd(), "./node_modules", "less-loader"),
                 ],
             },
             {
