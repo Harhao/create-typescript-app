@@ -19,7 +19,7 @@ import { execDirectoryPath, getOverrideConfig } from '../utils';
 const getWebpackProdConfig = async (envData: Record<string, any>) => {
 
     const isDropConsole = [Eenvironment.production].includes(envData.CUSTOM_ENV);
-    const srcDir = resolve(execDirectoryPath(), './src');
+    // const srcDir = resolve(execDirectoryPath(), './src');
 
     const baseConfig: Configuration = getWebpackBaseConfig(envData);
 
@@ -42,10 +42,10 @@ const getWebpackProdConfig = async (envData: Record<string, any>) => {
             //@ts-ignore
             new WebpackBar(),
             // 去除未用到的css样式
-            //@ts-ignore
-            new PurgeCSSPlugin({
-                paths: glob.sync(`${srcDir}/**/*`, { nodir: true })
-            }),
+            // //@ts-ignore
+            // new PurgeCSSPlugin({
+            //     paths: glob.sync(`${srcDir}/**/*`, { nodir: true })
+            // }),
             sentryWebpackPlugin(sentryOverride),
         ],
         optimization: {

@@ -69,7 +69,7 @@ const getWebpackBaseConfig = (envData: Record<string, any>) => ({
                             postcssOptions: {
                                 plugins: [
                                     pxToViewport({
-                                        viewportWidth: 750,
+                                        viewportWidth: 375,
                                         unitPrecision: 3,
                                         viewportUnit: 'vw',
                                         mediaQuery: false,
