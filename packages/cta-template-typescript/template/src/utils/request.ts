@@ -39,21 +39,14 @@ class CommonRequest {
                         //TODO
                     } else {
                         if (![
-                            EResponseCode.NEED_VERIFY,
-                            EResponseCode.HAS_LIKED,
-                            EResponseCode.NEED_EDIT_TEMPLATE,
-                            EResponseCode.ACTIITY_HAS_NOSTART,
-                            EResponseCode.ACTIITY_HAS_END,
-                            EResponseCode.GENERATE_PENDING,
+                            EResponseCode.SUCCESS
                         ].includes(response.data?.code)) {
-                            // TODO
                         }
                     }
                 }
                 return response.data;
             },
             async (e) => {
-                // TODO
                 return Promise.reject(e);
             }
         );

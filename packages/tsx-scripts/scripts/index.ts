@@ -9,6 +9,7 @@ import WebpackDevServer from 'webpack-dev-server';
 import getWebpackDevConfig from './webpack.dev';
 import getWebpackProdConfig from './webpack.prod';
 
+import { execSync } from 'child_process';
 import { rimrafSync } from 'rimraf';
 import { execDirectoryPath, getOverrideConfig } from '../utils';
 import { devServerConfig, printUrl } from '../config';
@@ -27,8 +28,8 @@ export const startDev = async (envData: Record<string, any>) => {
         const config = await getWebpackDevConfig(envData) as Configuration;
 
         const proxyConfig = await getOverrideConfig(
-            config, 
-            envData.NODE_ENV, 
+            config,
+            envData.NODE_ENV,
             './override/proxy.cjs',
         );
 
@@ -40,12 +41,21 @@ export const startDev = async (envData: Record<string, any>) => {
                 ...proxyConfig,
             }
         };
-                
+
+        const proxyPath = path.resolve(process.cwd(), './mock/index.ts');
+
+        if (fs.existsSync(proxyPath) && ['mock'].includes(envData.CUSTOM_ENV)) {
+            const output = execSync(`ts-node ${proxyPath}`, {
+                stdio: 'inherit',
+            });
+            console.log(output.toString());
+        }
+
         WebpackDevServer.addDevServerEntrypoints(config, mergeConfig);
 
         const compiler = webpack(config);
         const server = new WebpackDevServer(compiler, mergeConfig);
-        
+
         server.listen(mergeConfig.port, mergeConfig.host, () => {
             spinner.succeed(chalk.greenBright('✨ 构建成功啦～'));
             printUrl(server);
@@ -62,7 +72,7 @@ export const startBuild = async (envData: Record<string, any>) => {
 
         const deleteDir = path.resolve(execDirectoryPath(), './dist');
 
-        const config = await getWebpackProdConfig(envData) as Configuration; 
+        const config = await getWebpackProdConfig(envData) as Configuration;
 
         fs.existsSync(deleteDir) && rimrafSync(deleteDir);
 
@@ -93,23 +103,23 @@ export const startBuild = async (envData: Record<string, any>) => {
 export const loadEnvFile = (envConfig): Promise<IEnvDataConfig> => {
 
     return new Promise(resolve => {
-        
+
         const { NODE_ENV, CUSTOM_ENV } = envConfig;
 
         const spinner = ora('加载环境配置').start();
-    
+
         const defaultEnv = { parsed: {} };
         const envFilePath = path.resolve(execDirectoryPath(), `./.env.${CUSTOM_ENV}`);
-    
-        const config = fs.existsSync(envFilePath) ?  dotenv.config({
+
+        const config = fs.existsSync(envFilePath) ? dotenv.config({
             path: envFilePath,
             encoding: 'utf8',
             override: true,
         }) : defaultEnv;
-        
-    
+
+
         spinner.succeed('加载配置成功～');
-    
+
         resolve({
             NODE_ENV,
             CUSTOM_ENV,
