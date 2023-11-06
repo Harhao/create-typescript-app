@@ -1,6 +1,6 @@
 {
   "name": "cta-template-typescript",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "cta-template-typescript is a react typescript scaffold",
   "package": {
     "main": "./dist/index.html",
