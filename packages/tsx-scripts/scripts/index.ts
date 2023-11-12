@@ -9,7 +9,7 @@ import WebpackDevServer from 'webpack-dev-server';
 import getWebpackDevConfig from './webpack.dev';
 import getWebpackProdConfig from './webpack.prod';
 
-import { execSync } from 'child_process';
+import { spawn } from 'child_process';
 import { rimrafSync } from 'rimraf';
 import { execDirectoryPath, getOverrideConfig } from '../utils';
 import { devServerConfig, printUrl } from '../config';
@@ -45,10 +45,19 @@ export const startDev = async (envData: Record<string, any>) => {
         const proxyPath = path.resolve(process.cwd(), './mock/index.ts');
 
         if (fs.existsSync(proxyPath) && ['mock'].includes(envData.CUSTOM_ENV)) {
-            const output = execSync(`ts-node ${proxyPath}`, {
+            const childProcess = spawn('ts-node', [proxyPath], {
                 stdio: 'inherit',
+                detached: true,
+                shell: true,
             });
-            console.log(output.toString());
+
+            // 在父进程退出时发送信号给子进程，并等待子进程退出
+            process.on('SIGINT', () => {
+                childProcess.kill();
+                childProcess.on('exit', () => {
+                    process.exit(); // 父进程退出
+                });
+            });
         }
 
         WebpackDevServer.addDevServerEntrypoints(config, mergeConfig);

@@ -52,7 +52,6 @@ const start = async (runCommand: ECommandMap) => {
         case ECommandMap.BUILD: startBuild(envData); break;
         case ECommandMap.DEV: startDev(envData); break;
         case ECommandMap.TEST: startBuild(envData); break;
-        // 增加fork process 启动子进程来服务 mock server
         case ECommandMap.MOCK: startDev(envData); break;
         default: console.log('No environment specified');
     }

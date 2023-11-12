@@ -16,6 +16,7 @@ export const devServerConfig = {
     quiet: true,
     proxy: {},
 };
+
 export const printUrl = (server) => {
     const protocol = server.https ? 'https' : 'http';
     const hostname = server.host || devServerConfig.host;

@@ -1,4 +1,5 @@
 import fs from 'fs';
+import net from "net";
 import path from 'path';
 
 export const execDirectoryPath = () => {
@@ -6,8 +7,8 @@ export const execDirectoryPath = () => {
 }
 
 export const getOverrideConfig = async (
-    config: Record<string, any>, 
-    env: string, 
+    config: Record<string, any>,
+    env: string,
     fileName: string,
 ): Promise<Record<string, any>> => {
 
@@ -20,20 +21,48 @@ export const getOverrideConfig = async (
             const overrideFn = eval('require')(overridePath);
 
             if (typeof overrideFn === 'function') {
-                const overrideConfig = overrideFn(config, env);
+                const overrideConfig = overrideFn(config, env) || {};
 
-                resolve(overrideConfig);
+                resolve({
+                    ...config,
+                    ...overrideConfig
+                });
                 return;
             }
-            resolve({});
-        }  else {
+            resolve(config);
+        } else {
             console.warn(`\n${fileName} not found\n`);
             resolve({});
         }
     });
 }
 
-// 开启子进程运行代码
-export const forkChildProcess = () => {
+export function isPortUsed(port: number) {
+    return new Promise((resolve, reject) => {
+        let server = net.createServer().listen(port);
+        server.on('listening', function () {
+            server.close();
+            resolve(port);
+        });
+        server.on('error', function (err: { code: string }) {
+            if (err.code == 'EADDRINUSE') {
+                resolve(err);
+                return;
+            }
+            reject(err);
+        });
+    });
+}
 
+export const getServerPort = async (port: number) => {
+
+    let res = await isPortUsed(port);
+
+    if (res instanceof Error) {
+        console.log(`端口：${port}被占用\n`);
+        port++;
+        return await getServerPort(port);
+    } else {
+        return port;
+    }
 }
