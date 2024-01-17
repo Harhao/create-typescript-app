@@ -1,7 +1,9 @@
+import { ThemeProvider } from "styled-components";
 import React, { LazyExoticComponent, Suspense } from 'react';
-import SpinLoading from '@/modules/SpinLoading';
-import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
+
 import { useStore } from '@/stores';
+import { RootContainer } from "@/components/Theme";
+import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 type IRouteItem = {
     path: string;
@@ -9,33 +11,43 @@ type IRouteItem = {
     private: boolean;
     key?: string;
     exact?: boolean;
-    children?: IRouteItem[];
+    children?: IRouteItem[] |  null;
 };
+
 export type IUseRouteProps = IRouteItem[];
 
 
 const PrivateRoute = (props: IRouteItem) => {
+    const store = useStore();
     //@ts-ignore
-    const [store] = useStore();
-    const { token = null } = store;
-    return !token ? <Redirect to="/" /> : <Route {...props} />
+    const { token = null  } = store.getState()?.user;
+
+    return !token? (
+        <Redirect to="/" /> 
+    ): <Route {...props} />
 }
 
 
 export function useRoute(routes: IUseRouteProps): React.JSX.Element {
 
     return (
-        <Suspense fallback={<SpinLoading />}>
-            <HashRouter>
-                <Switch>
-                    {
-                        routes.map((props: IRouteItem) => {
-                            return props?.private ?
-                                <PrivateRoute {...props} /> : <Route {...props} />
-                        })
-                    }
-                </Switch>
-            </HashRouter>
-        </Suspense>
+        <ThemeProvider
+            theme={themeColor}
+        >
+            <RootContainer>
+                <Suspense fallback={<></>}>
+                    <HashRouter>
+                        <Switch>
+                            {
+                                routes.map((props: IRouteItem) => {
+                                    return props?.private ?
+                                        <PrivateRoute {...props} /> : <Route {...props} />
+                                })
+                            }
+                        </Switch>
+                    </HashRouter>
+                </Suspense>
+            </RootContainer>
+        </ThemeProvider>
     );
 }

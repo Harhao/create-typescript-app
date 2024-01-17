@@ -1,14 +1,10 @@
 module.exports = function proxy () {
     return {
         '/api': {
+            // 需要转发到测试环境的域名地址
             target: 'https://www.target.com',
             changeOrigin: true,
             pathRewrite: { '^/api': '' },
-        },
-        '/wx': {
-            target: 'https://www.target.com/wx',
-            changeOrigin: true,
-            pathRewrite: { '^/wx': '' },
         },
         '/mock': {
             target: 'http://localhost:4000',

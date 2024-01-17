@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useContext, ReactElement } from 'react';
 import { initialState, InitialStore } from './state';
-import { reducer, StoreAction } from './reducer';
+import { combinedReducer, StoreAction } from './reducers';
 
 export type StoreProviderProps = {
     children?: ReactElement;
@@ -14,7 +14,7 @@ export const useStore = function (): [InitialStore, (action: StoreAction) => {}]
 }
 
 export const StoreProvider = function ({ children, ...storeData }: StoreProviderProps) {
-    const [state, dispatch] = useReducer(reducer, initialState({ ...storeData }));
+    const [state, dispatch] = useReducer(combinedReducer, initialState({ ...storeData }));
 
     if (!store.isReady) {
         store.isReady = true;
@@ -36,4 +36,4 @@ const store = {
     },
 }
 
-export default store
+export default store;

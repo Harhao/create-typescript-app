@@ -1,15 +1,15 @@
 import React from "react";
-import Router from '@/routes/index';
+import Router from '@/routes';
 
 import { StoreProvider } from "@/stores";
-import { defaultValue } from "@/stores/state";
+import { defaultInitData } from "@/stores/state";
 
 import './index.less';
 
 
 export default function App() {
     return (
-        <StoreProvider {...defaultValue}>
+        <StoreProvider {...defaultInitData}>
             <Router />
         </StoreProvider>
     );

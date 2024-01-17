@@ -1,12 +1,12 @@
 import { IRequestParams } from "@/const";
 import { request } from "../utils";
 
-// 查看生成结果
-export async function getGenerateResult(params: { phone: string, t?: string, sign?: string }) {
+// 查询用户信息
+export async function getUserInfo() {
     const fetchParams: IRequestParams = {
-        url: `${process.env.SETTING_API_PREFIX}/photo/getGenerateList`,
+        url: `/user/info`,
         method: 'get',
-        data: params,
+        data: {},
     };
     return await request.fetch(fetchParams);
 }
